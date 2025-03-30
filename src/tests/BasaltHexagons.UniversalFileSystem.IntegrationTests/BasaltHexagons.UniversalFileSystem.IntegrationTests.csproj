@@ -6,6 +6,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\BasaltHexagons.UniversalFileSystem.AliyunOss\BasaltHexagons.UniversalFileSystem.AliyunOss.csproj" />
         <ProjectReference Include="..\..\src\BasaltHexagons.UniversalFileSystem.AwsS3\BasaltHexagons.UniversalFileSystem.AwsS3.csproj"/>
         <ProjectReference Include="..\..\src\BasaltHexagons.UniversalFileSystem.AzureBlob\BasaltHexagons.UniversalFileSystem.AzureBlob.csproj"/>
         <ProjectReference Include="..\..\src\BasaltHexagons.UniversalFileSystem.File\BasaltHexagons.UniversalFileSystem.File.csproj"/>

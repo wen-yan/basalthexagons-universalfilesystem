@@ -1,5 +1,6 @@
-﻿using BasaltHexagons.UniversalFileSystem.Core;
-
+﻿using System;
+using Azure.Storage.Blobs;
+using BasaltHexagons.UniversalFileSystem.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BasaltHexagons.UniversalFileSystem.AzureBlob;
@@ -10,5 +11,13 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddKeyedTransient<IFileSystemFactory, AzureBlobFileSystemFactory>(typeof(AzureBlobFileSystemFactory).FullName);
+    }
+
+    public static IServiceCollection AddAzureBlobServiceClient(this IServiceCollection services,
+        Func<IServiceProvider, BlobServiceClient> implementationFactory)
+    {
+        return services
+            .AddKeyedTransient<BlobServiceClient>(AzureBlobFileSystemFactory.CustomClientServiceKey,
+                (serviceProvider, serviceKey) => implementationFactory(serviceProvider));
     }
 }

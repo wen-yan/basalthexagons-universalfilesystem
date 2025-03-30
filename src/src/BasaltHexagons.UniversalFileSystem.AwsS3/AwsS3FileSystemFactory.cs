@@ -37,7 +37,7 @@ enum ClientCredentialType
 [AsyncMethodBuilder(typeof(ContinueOnAnyAsyncMethodBuilder))]
 class AwsS3FileSystemFactory : IFileSystemFactory
 {
-    public const string CustomClientServiceKey = "BasaltHexagons.UniversalFileSystem.AwsS3.AwsS3FileSystemFactory.CustomAmazonS3Client";
+    public static readonly string CustomClientServiceKey = $"{typeof(AwsS3FileSystemFactory).FullName}.CustomAmazonS3Client";
 
     public AwsS3FileSystemFactory(IServiceProvider serviceProvider)
     {

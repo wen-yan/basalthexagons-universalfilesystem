@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasaltHexagons.UniversalFil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasaltHexagons.UniversalFileSystem.Core.UnitTests", "tests\BasaltHexagons.UniversalFileSystem.Core.UnitTests\BasaltHexagons.UniversalFileSystem.Core.UnitTests.csproj", "{AD8F81F2-149E-4A03-94F9-F27142D866AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasaltHexagons.UniversalFileSystem.AliyunOss", "src\BasaltHexagons.UniversalFileSystem.AliyunOss\BasaltHexagons.UniversalFileSystem.AliyunOss.csproj", "{B8C20140-385D-4745-B6CE-238F3D69685F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{AD8F81F2-149E-4A03-94F9-F27142D866AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD8F81F2-149E-4A03-94F9-F27142D866AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD8F81F2-149E-4A03-94F9-F27142D866AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8C20140-385D-4745-B6CE-238F3D69685F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8C20140-385D-4745-B6CE-238F3D69685F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8C20140-385D-4745-B6CE-238F3D69685F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8C20140-385D-4745-B6CE-238F3D69685F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,5 +94,6 @@ Global
 		{47513295-AEF4-4AD1-B870-BEEACA70623A} = {13929D5B-7301-4101-8FD1-3246FDEDD279}
 		{FF063A6B-0C76-4CCA-A2FD-F4F29B997A4B} = {7955D5E3-0739-4EA7-AA7E-A015D1300D1A}
 		{AD8F81F2-149E-4A03-94F9-F27142D866AA} = {13929D5B-7301-4101-8FD1-3246FDEDD279}
+		{B8C20140-385D-4745-B6CE-238F3D69685F} = {7955D5E3-0739-4EA7-AA7E-A015D1300D1A}
 	EndGlobalSection
 EndGlobal

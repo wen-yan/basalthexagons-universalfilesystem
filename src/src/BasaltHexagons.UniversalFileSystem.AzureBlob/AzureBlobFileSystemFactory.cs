@@ -29,7 +29,7 @@ enum ClientCredentialType
 [AsyncMethodBuilder(typeof(ContinueOnAnyAsyncMethodBuilder))]
 class AzureBlobFileSystemFactory : IFileSystemFactory
 {
-    public const string CustomClientServiceKey = "BasaltHexagons.UniversalFileSystem.AzureBlob.AzureBlobFileSystemFactory.CustomBlobServiceClient";
+    public static readonly string CustomClientServiceKey = $"{typeof(AzureBlobFileSystemFactory).FullName}.CustomBlobServiceClient";
 
     public AzureBlobFileSystemFactory(IServiceProvider serviceProvider)
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BasaltHexagons.UniversalFileSystem.AliyunOss;
 using BasaltHexagons.UniversalFileSystem.AwsS3;
 using BasaltHexagons.UniversalFileSystem.AzureBlob;
 using BasaltHexagons.UniversalFileSystem.Core;
@@ -21,6 +22,7 @@ public abstract class UniversalFileSystemStore
         yield return [CreateFileUniversalFileSystem()];
         yield return [CreateAwsS3UniversalFileSystem()];
         yield return [CreateAzureBlobUniversalFileSystem()];
+        // yield return [CreateAliyunOssUniversalFileSystem()];
     }
 
     private static UniversalFileSystemTestWrapper CreateMemoryUniversalFileSystem()
@@ -93,6 +95,25 @@ public abstract class UniversalFileSystemStore
             },
             services => services.AddAzureBlobFileSystem(),
             $"abfss://ufs-integration-test-abfss");
+    }
+
+    private static UniversalFileSystemTestWrapper CreateAliyunOssUniversalFileSystem()
+    {
+        return CreateUniversalFileSystem(
+            builder =>
+            {
+                builder.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Schemes:oss:ImplementationFactoryClass"] = "BasaltHexagons.UniversalFileSystem.AliyunOss.AliyunOssFileSystemFactory",
+                    ["Schemes:oss:Implementation:Client:Endpoint"] = "127.0.0.1:8280",
+                    ["Schemes:oss:Implementation:Client:Credentials:Type"] = "Default",
+                    ["Schemes:oss:Implementation:Client:Credentials:AccessKey"] = "AccessKeyId",
+                    ["Schemes:oss:Implementation:Client:Credentials:SecretKey"] = "AccessKeySecret",
+                    ["Schemes:oss:Implementation:Settings:CreateBucketIfNotExists"] = "true",
+                });
+            },
+            services => services.AddAliyunOssFileSystem(),
+            $"oss://ufs-integration-test-oss");
     }
 
     private static UniversalFileSystemTestWrapper CreateUniversalFileSystem(Action<IConfigurationBuilder> configurationBuilder, Func<IServiceCollection, IServiceCollection> servicesBuilder, string baseUri)

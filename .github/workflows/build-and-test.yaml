@@ -30,7 +30,7 @@ jobs:
       - name: Setup test environment
         run: |
           chmod +x ./localstack/startup.sh
-          docker compose up --detach --wait
+          docker compose up --detach --build --wait
         working-directory: ./src/test-env
 
       - name: Run tests - ${{ matrix.configuration }}
