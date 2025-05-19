@@ -11,13 +11,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BasaltHexagons.UniversalFileSystem;
 
+interface IFileSystemStore
+{
+    IFileSystem Create(Uri uri);
+}
+
 [AsyncMethodBuilder(typeof(ContinueOnAnyAsyncMethodBuilder))]
-class DefaultFileSystemCreator : IFileSystemCreator
+class DefaultFileSystemStore : IFileSystemStore
 {
     private readonly ConcurrentDictionary<string /* name */, Regex> _uriRegexes = new();
     private readonly ConcurrentDictionary<string /* name */, IFileSystem> _fileSystems = new();
 
-    public DefaultFileSystemCreator(IServiceProvider serviceProvider, IConfiguration configuration)
+    public DefaultFileSystemStore(IServiceProvider serviceProvider, IConfiguration configuration)
     {
         this.ServiceProvider = serviceProvider;
         this.Configuration = configuration;

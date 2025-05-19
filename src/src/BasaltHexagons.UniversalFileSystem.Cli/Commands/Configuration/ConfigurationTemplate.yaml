@@ -1,4 +1,5 @@
 UniversalFileSystem-Cli:
   UniversalFileSystem:
+    FileSystems:
   
 <allFactoryTemplates>

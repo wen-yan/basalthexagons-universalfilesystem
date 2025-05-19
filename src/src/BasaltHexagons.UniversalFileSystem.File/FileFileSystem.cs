@@ -15,8 +15,7 @@ class FileFileSystem : AsyncDisposable, IFileSystem
 {
     #region IFileSystem
 
-    public async IAsyncEnumerable<ObjectMetadata> ListObjectsAsync(Uri prefix, bool recursive,
-        [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<ObjectMetadata> ListObjectsAsync(Uri prefix, bool recursive, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         EnumerationOptions enumerationOptions = new()
         {
@@ -90,8 +89,7 @@ class FileFileSystem : AsyncDisposable, IFileSystem
         string? dir = Path.GetDirectoryName(uri.AbsolutePath);
         if (dir != null)
             Directory.CreateDirectory(dir);
-        await using FileStream fileStream = new(uri.AbsolutePath, overwrite ? FileMode.Create : FileMode.CreateNew,
-            FileAccess.Write);
+        await using FileStream fileStream = new(uri.AbsolutePath, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.Write);
         await stream.CopyToAsync(fileStream, cancellationToken);
     }
 
@@ -150,12 +148,11 @@ class FileFileSystem : AsyncDisposable, IFileSystem
     private Task<bool> DoesDirectoryExistAsync(Uri uri, CancellationToken cancellationToken) =>
         Task.FromResult(System.IO.Directory.Exists(uri.AbsolutePath));
 
-    private async Task<ObjectMetadata> GetObjectMetadataInternalAsync(Uri uri, bool returnDirectory,
-        CancellationToken cancellationToken)
+    private async Task<ObjectMetadata> GetObjectMetadataInternalAsync(Uri uri, bool returnDirectory, CancellationToken cancellationToken)
     {
         if (await this.DoesFileExistAsync(uri, cancellationToken))
-            return new ObjectMetadata(uri, ObjectType.File, new FileInfo(uri.AbsolutePath).Length,
-                System.IO.File.GetLastWriteTimeUtc(uri.AbsolutePath));
+            return new ObjectMetadata(uri, ObjectType.File, new FileInfo(uri.AbsolutePath).Length, System.IO.File.GetLastWriteTimeUtc(uri.AbsolutePath));
+
         if (returnDirectory && await this.DoesDirectoryExistAsync(uri, cancellationToken))
             return new ObjectMetadata(new Uri($"{uri}/"), ObjectType.Prefix, null, null);
 

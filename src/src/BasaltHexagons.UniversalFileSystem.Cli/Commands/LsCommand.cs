@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BasaltHexagons.CommandLine;
 using BasaltHexagons.CommandLine.Annotations;
+using BasaltHexagons.UniversalFileSystem.Cli.Commands.FileSystem;
 using BasaltHexagons.UniversalFileSystem.Cli.Output;
 using BasaltHexagons.UniversalFileSystem.Core;
 

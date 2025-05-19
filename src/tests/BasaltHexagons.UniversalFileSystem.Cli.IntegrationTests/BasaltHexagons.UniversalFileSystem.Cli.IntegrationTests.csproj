@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BasaltHexagons.UniversalFileSystem.Cli\BasaltHexagons.UniversalFileSystem.Cli.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\BasaltHexagons.UniversalFileSystem.IntegrationTests\it-settings.yaml">
+      <Link>it-settings.yaml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

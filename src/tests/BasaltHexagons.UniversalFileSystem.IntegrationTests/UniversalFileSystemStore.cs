@@ -5,6 +5,7 @@ using Azure.Storage.Blobs;
 using BasaltHexagons.UniversalFileSystem.AliyunOss;
 using BasaltHexagons.UniversalFileSystem.AwsS3;
 using BasaltHexagons.UniversalFileSystem.AzureBlob;
+using BasaltHexagons.UniversalFileSystem.Core;
 using BasaltHexagons.UniversalFileSystem.File;
 using BasaltHexagons.UniversalFileSystem.Memory;
 using Microsoft.Extensions.Configuration.Yaml;
@@ -13,17 +14,17 @@ using Microsoft.Extensions.Hosting;
 
 namespace BasaltHexagons.UniversalFileSystem.IntegrationTests;
 
-public abstract class UniversalFileSystemStore
+public static class UniversalFileSystemStore
 {
     public static IEnumerable<object[]> GetSingleUniversalFileSystem()
     {
         IUniversalFileSystem ufs = CreateUniversalFileSystem();
-        List<UriWrapper> uriWrappers = CreateUriWrappers(ufs).ToList();
+        IEnumerable<UriWrapper> uriWrappers = CreateUriWrappers(ufs);
 
         return uriWrappers
             .Select(x =>
             {
-                ufs.InitializeAsync(x).Wait();
+                InitializeUfsWrapperAsync(ufs, x).Wait();
                 return new object[] { ufs, x };
             });
     }
@@ -31,14 +32,14 @@ public abstract class UniversalFileSystemStore
     public static IEnumerable<object[]> GetTwoUniversalFileSystem()
     {
         IUniversalFileSystem ufs = CreateUniversalFileSystem();
-        List<UriWrapper> uriWrappers = CreateUriWrappers(ufs).ToList();
+        IEnumerable<UriWrapper> uriWrappers = CreateUriWrappers(ufs);
 
         return uriWrappers.Join(uriWrappers, _ => true, _ => true, (x, y) =>
             {
                 // This is used for debugging
                 // if (x.ToString() != "abfss" || y.ToString() != "abfss2")
                 //     return null;
-                ufs.InitializeAsync(x, y).Wait();
+                InitializeUfsWrappersAsync(ufs, x, y).Wait();
                 return new object[] { ufs, x, y };
             })
             .Where(x => x != null)
@@ -47,27 +48,31 @@ public abstract class UniversalFileSystemStore
 
     private static IEnumerable<UriWrapper> CreateUriWrappers(IUniversalFileSystem ufs)
     {
-        static UriWrapper CreateUriWrapper(IUniversalFileSystem ufs, string name, string baseUri) => new(name, baseUri);
+        UriWrapper CreateUriWrapper(IUniversalFileSystem ufs, string name, string baseUri) => new(name, baseUri);
 
-        static UriWrapper CreateFileUriWrapper(IUniversalFileSystem ufs, string name)
-        {
-            string root = $"{Environment.CurrentDirectory}/ufs-integration-test-file";
-            return CreateUriWrapper(ufs, name, $"file://{root}/");
-        }
+        // UriWrapper CreateFileUriWrapper(IUniversalFileSystem ufs, string name)
+        // {
+        //     string root = $"{Environment.CurrentDirectory}/ufs-it-file";
+        //     return new(name, $"file://{root}/");
+        // }
 
-        yield return CreateUriWrapper(ufs, "memory", "memory://");
-        yield return CreateFileUriWrapper(ufs, "file");
-        yield return CreateUriWrapper(ufs, "s3", "s3://ufs-it-s3");
-        yield return CreateUriWrapper(ufs, "s3-custom-client", "s3://ufs-it-s3-custom-client");
-        yield return CreateUriWrapper(ufs, "abfss", "abfss://ufs-it-abfss");
-        yield return CreateUriWrapper(ufs, "abfss-custom-client", "abfss://ufs-it-abfss-custom-client");
-        // yield return CreateUriWrapper(ufs, "oss", "oss://ufs-it-oss");   # Can't find oss-emulator
+        List<UriWrapper> wrappers =
+        [
+            CreateUriWrapper(ufs, "memory", "memory://"),
+            // CreateFileUriWrapper(ufs, "file"),       // TODO: #38
+            CreateUriWrapper(ufs, "s3", "s3://ufs-it-s3"),
+            CreateUriWrapper(ufs, "s3-custom-client", "s3://ufs-it-s3-custom-client"),
+            CreateUriWrapper(ufs, "abfss", "abfss://ufs-it-abfss"),
+            CreateUriWrapper(ufs, "abfss-custom-client", "abfss://ufs-it-abfss-custom-client"),
+            // CreateUriWrapper(ufs, "oss", "oss://ufs-it-oss"),   # Can't find a oss emulator which works
+        ];
+        return wrappers;
     }
 
     private static IUniversalFileSystem CreateUniversalFileSystem()
     {
         IHost host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration((context, builder) => { builder.AddYamlFile("test-settings.yaml", false, false); })
+            .ConfigureAppConfiguration((context, builder) => { builder.AddYamlFile("it-settings.yaml", false, false); })
             .ConfigureServices((context, services) =>
             {
                 services
@@ -90,5 +95,34 @@ public abstract class UniversalFileSystemStore
             })
             .Build();
         return host.Services.GetRequiredService<IUniversalFileSystem>();
+    }
+
+    private static async Task InitializeUfsWrappersAsync(IUniversalFileSystem ufs, params UriWrapper[] uriWrappers)
+    {
+        foreach (UriWrapper uriWrapper in uriWrappers)
+        {
+            await InitializeUfsWrapperAsync(ufs, uriWrapper);
+        }
+    }
+
+    private static async Task InitializeUfsWrapperAsync(IUniversalFileSystem ufs, UriWrapper uriWrapper)
+    {
+        if (uriWrapper.BaseUri.Scheme.StartsWith("file"))
+        {
+            string root = uriWrapper.BaseUri.LocalPath;
+
+            // Delete all files
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, true);
+            }
+        }
+        else
+        {
+            // delete all files
+            IAsyncEnumerable<ObjectMetadata> allFiles = ufs.ListObjectsAsync(uriWrapper.GetFullUri(""), true);
+            await foreach (ObjectMetadata file in allFiles)
+                await ufs.DeleteFileAsync(file.Uri);
+        }
     }
 }

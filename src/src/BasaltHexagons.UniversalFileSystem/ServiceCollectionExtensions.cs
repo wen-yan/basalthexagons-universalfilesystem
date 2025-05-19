@@ -8,10 +8,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddUniversalFileSystem(this IServiceCollection services, string configurationRoot)
     {
         return services
-            .AddSingleton<IFileSystemCreator>(serviceProvider =>
+            .AddSingleton<IFileSystemStore>(serviceProvider =>
             {
                 IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>().GetSection(configurationRoot);
-                return new DefaultFileSystemCreator(serviceProvider, configuration);
+                return new DefaultFileSystemStore(serviceProvider, configuration);
             })
             .AddSingleton<IUniversalFileSystem, UniversalFileSystem>();
     }

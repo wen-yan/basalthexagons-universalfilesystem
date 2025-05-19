@@ -8,9 +8,13 @@
             "commandName": "Project",
             "commandLineArgs": "config init"
         },
+        "cp": {
+            "commandName": "Project",
+            "commandLineArgs": "cp file:///W:/Temp/ufs/current.sql file:///W:/Temp/ufs/current2.sql"
+        },
         "ls": {
             "commandName": "Project",
-            "commandLineArgs": "ls -r file://W:/GitHub/wen-yan/basalthexagons-universalfilesystem/code/src/BasaltHexagons.UniversalFileSystem.Cli"
+            "commandLineArgs": "ls -r file://W:/GitHub/wen-yan/basalthexagons-universalfilesystem/src/src/BasaltHexagons.UniversalFileSystem.Cli"
         },
         "cat": {
             "commandName": "Project",

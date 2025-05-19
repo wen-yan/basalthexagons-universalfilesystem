@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BasaltHexagons.UniversalFileSystem.Cli.Commands;
+namespace BasaltHexagons.UniversalFileSystem.Cli.Commands.FileSystem;
 
 abstract class FileSystemCommand<TOptions> : CommandBase<TOptions>
 {

@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="test-settings.yaml">
+      <None Update="it-settings.yaml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

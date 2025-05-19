@@ -56,7 +56,7 @@ public class AzureBlobFileSystem : AsyncDisposable, IFileSystem
         }
         finally
         {
-            await sourceBlobLeaseClient.ReleaseAsync();
+            await sourceBlobLeaseClient.ReleaseAsync(); // Don't use cancellation, want to it complete
         }
     }
 
@@ -106,8 +106,8 @@ public class AzureBlobFileSystem : AsyncDisposable, IFileSystem
         while (keyPrefixQueue.Count > 0)
         {
             string key = keyPrefixQueue.Dequeue();
-            await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: key,
-                               delimiter: "/", cancellationToken: cancellationToken))
+            await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(
+                               prefix: key, delimiter: "/", cancellationToken: cancellationToken))
             {
                 if (blobHierarchyItem.IsPrefix)
                 {

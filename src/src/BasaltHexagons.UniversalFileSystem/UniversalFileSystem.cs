@@ -12,14 +12,14 @@ namespace BasaltHexagons.UniversalFileSystem;
 [AsyncMethodBuilder(typeof(ContinueOnAnyAsyncMethodBuilder))]
 class UniversalFileSystem : AsyncDisposable, IUniversalFileSystem
 {
-    public UniversalFileSystem(IFileSystemCreator implCreator)
+    public UniversalFileSystem(IFileSystemStore implStore)
     {
-        this.ImplCreator = implCreator;
+        this.ImplStore = implStore;
     }
 
-    private IFileSystemCreator ImplCreator { get; }
+    private IFileSystemStore ImplStore { get; }
 
-    private IFileSystem GetImpl(Uri uri) => this.ImplCreator.Create(uri);
+    private IFileSystem GetImpl(Uri uri) => this.ImplStore.Create(uri);
 
 
     #region IUniversalFileSystem

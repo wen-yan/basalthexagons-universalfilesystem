@@ -13,6 +13,6 @@ partial class AppCommandBuilder : RootCliCommandBuilder<AppCommandOptions>
 {
     public AppCommandBuilder(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        this.Description = "BasaltHexagons Universal File System";
+        this.Description = "BasaltHexagons Universal File System Command Line Tool";
     }
 }

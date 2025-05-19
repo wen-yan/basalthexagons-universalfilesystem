@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.Threading.Tasks;
 using BasaltHexagons.CommandLine;
 using BasaltHexagons.CommandLine.Annotations;
+using BasaltHexagons.UniversalFileSystem.Cli.Commands.FileSystem;
 using BasaltHexagons.UniversalFileSystem.Cli.Output;
 
 namespace BasaltHexagons.UniversalFileSystem.Cli.Commands;
